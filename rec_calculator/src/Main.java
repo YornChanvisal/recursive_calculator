@@ -1,7 +1,7 @@
 public class Main {
     public static void main(String[] args) {
 
-        String exp = "(10 + 2) * 10 - 6 / ((2.5 + 1) + (3 - 1))";
+        String exp = "(1 + 2) * 10 - 6 / (2 + 1)";
         String newExp = exp.replace(" ", "");
 
         double result = calculate(newExp);
@@ -10,7 +10,7 @@ public class Main {
     }
 
     public static double calculate(String exp) {
-        double result = 0;
+        double result;
 
         int startIndex;
         int endIndex;
@@ -27,6 +27,21 @@ public class Main {
         } else {
             //check if "*" and "/" exist then create a sub string to calculate it first and replace it
             //all left is "+" and "-" we can do operation from left to right
+            String[] tokens = exp.split("[-+]");
+            for (String token : tokens) {
+                if (token.contains("*") || token.contains("/")) {
+                    result = operate(token);
+                    exp = exp.replace(token, String.valueOf(result));
+                    System.out.println(exp);
+                }
+            }
+
+            tokens = exp.split("(?=[+-])");
+            result = 0;
+            for (String token : tokens) {
+                result += Double.parseDouble(token);
+            }
+
             return result;
         }
     }
